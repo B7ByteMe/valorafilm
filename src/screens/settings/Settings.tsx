@@ -357,35 +357,17 @@ const Settings = ({navigation}: Props) => {
               }}
               style={({pressed}) => ({
                 opacity: pressed ? 0.92 : 1,
-                transform: [{scale: pressed ? 0.99 : 1}],
-                marginBottom: 20,
+                transform: [{scale: pressed ? 0.985 : 1}],
+                marginBottom: 24,
               })}>
-              <LinearGradient
-                colors={['#252830', '#1c1e24', '#15161b']}
-                start={{x: 0, y: 0}}
-                end={{x: 1, y: 1}}
+              <View
                 style={{
+                  backgroundColor: '#232427',
                   borderRadius: 24,
-                  padding: 18,
+                  padding: 20,
                   borderWidth: 1,
-                  borderColor: 'rgba(255, 255, 255, 0.08)',
-                  overflow: 'hidden',
-                  position: 'relative',
+                  borderColor: 'rgba(255, 255, 255, 0.06)',
                 }}>
-                {/* Subtle decorative glow orb */}
-                <View
-                  style={{
-                    position: 'absolute',
-                    top: -40,
-                    right: -40,
-                    width: 120,
-                    height: 120,
-                    borderRadius: 60,
-                    backgroundColor: colors.primary,
-                    opacity: 0.08,
-                  }}
-                />
-
                 {/* Main branding row */}
                 <View
                   style={{
@@ -394,42 +376,23 @@ const Settings = ({navigation}: Props) => {
                     justifyContent: 'space-between',
                   }}>
                   <View style={{flexDirection: 'row', alignItems: 'center', flex: 1}}>
-                    {/* App Icon Container */}
+                    {/* App Icon */}
                     <View
                       style={{
-                        position: 'relative',
-                        marginRight: 16,
+                        width: 58,
+                        height: 58,
+                        borderRadius: 18,
+                        backgroundColor: '#1a1b1e',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        marginRight: 14,
+                        borderWidth: 1,
+                        borderColor: 'rgba(255, 255, 255, 0.08)',
                       }}>
-                      <LinearGradient
-                        colors={['#323642', '#22252e']}
-                        style={{
-                          width: 62,
-                          height: 62,
-                          borderRadius: 20,
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          borderWidth: 1,
-                          borderColor: 'rgba(255, 255, 255, 0.12)',
-                        }}>
-                        <Image
-                          source={require('../../../assets/icon.png')}
-                          style={{width: 44, height: 44}}
-                          resizeMode="contain"
-                        />
-                      </LinearGradient>
-                      {/* Active Status Dot */}
-                      <View
-                        style={{
-                          position: 'absolute',
-                          bottom: -2,
-                          right: -2,
-                          width: 14,
-                          height: 14,
-                          borderRadius: 7,
-                          backgroundColor: '#10B981',
-                          borderWidth: 2,
-                          borderColor: '#1c1e24',
-                        }}
+                      <Image
+                        source={require('../../../assets/icon.png')}
+                        style={{width: 40, height: 40}}
+                        resizeMode="contain"
                       />
                     </View>
 
@@ -440,9 +403,9 @@ const Settings = ({navigation}: Props) => {
                           role="titleLarge"
                           style={{
                             color: '#ffffff',
-                            fontSize: 21,
+                            fontSize: 20,
                             fontWeight: '700',
-                            letterSpacing: 0.3,
+                            letterSpacing: 0.2,
                           }}>
                           Valora Film
                         </AppText>
@@ -460,7 +423,8 @@ const Settings = ({navigation}: Props) => {
                             style={{
                               color: '#34D399',
                               fontSize: 10,
-                              fontWeight: '600',
+                              fontWeight: '700',
+                              letterSpacing: 0.5,
                               textTransform: 'uppercase',
                             }}>
                             Active
@@ -471,7 +435,8 @@ const Settings = ({navigation}: Props) => {
                         style={{
                           color: '#9CA3AF',
                           fontSize: 12,
-                          marginTop: 3,
+                          marginTop: 4,
+                          lineHeight: 16,
                         }}>
                         Your Cinematic Streaming Experience
                       </AppText>
@@ -484,7 +449,7 @@ const Settings = ({navigation}: Props) => {
                       width: 32,
                       height: 32,
                       borderRadius: 16,
-                      backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                      backgroundColor: '#2e3036',
                       alignItems: 'center',
                       justifyContent: 'center',
                       marginLeft: 10,
@@ -492,7 +457,7 @@ const Settings = ({navigation}: Props) => {
                     <Ionicons
                       name="chevron-forward"
                       size={18}
-                      color="rgba(255, 255, 255, 0.6)"
+                      color="rgba(255, 255, 255, 0.7)"
                     />
                   </View>
                 </View>
@@ -502,99 +467,75 @@ const Settings = ({navigation}: Props) => {
                   style={{
                     height: 1,
                     backgroundColor: 'rgba(255, 255, 255, 0.06)',
-                    marginVertical: 14,
+                    marginTop: 18,
+                    marginBottom: 16,
                   }}
                 />
 
-                {/* Info Chips Grid */}
+                {/* Info Chips Row */}
                 <View
                   style={{
                     flexDirection: 'row',
+                    alignItems: 'center',
                     gap: 8,
                   }}>
                   {/* Version Pill */}
                   <View
                     style={{
                       flex: 1,
-                      backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      backgroundColor: '#2d3036',
                       borderRadius: 14,
                       paddingVertical: 9,
-                      paddingHorizontal: 10,
+                      paddingHorizontal: 8,
                       borderWidth: 1,
-                      borderColor: 'rgba(255, 255, 255, 0.05)',
-                      alignItems: 'center',
+                      borderColor: 'rgba(255, 255, 255, 0.04)',
                     }}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        marginBottom: 3,
-                      }}>
-                      <MaterialIcons
-                        name="verified"
-                        size={12}
-                        color={colors.primary}
-                        style={{marginRight: 4}}
-                      />
-                      <AppText
-                        style={{
-                          color: '#9CA3AF',
-                          fontSize: 10,
-                          fontWeight: '500',
-                        }}>
-                        Version
-                      </AppText>
-                    </View>
+                    <MaterialIcons
+                      name="verified"
+                      size={13}
+                      color={colors.primary}
+                      style={{marginRight: 5}}
+                    />
                     <AppText
                       style={{
                         color: '#ffffff',
                         fontSize: 12,
-                        fontWeight: '700',
+                        fontWeight: '600',
                       }}>
                       v{Constants.expoConfig?.version || '1.0.1'}
                     </AppText>
                   </View>
 
-                  {/* Arch / Target Pill */}
+                  {/* Arch Pill */}
                   <View
                     style={{
                       flex: 1,
-                      backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      backgroundColor: '#2d3036',
                       borderRadius: 14,
                       paddingVertical: 9,
-                      paddingHorizontal: 10,
+                      paddingHorizontal: 8,
                       borderWidth: 1,
-                      borderColor: 'rgba(255, 255, 255, 0.05)',
-                      alignItems: 'center',
+                      borderColor: 'rgba(255, 255, 255, 0.04)',
                     }}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        marginBottom: 3,
-                      }}>
-                      <MaterialCommunityIcons
-                        name="cpu-64-bit"
-                        size={12}
-                        color="#60A5FA"
-                        style={{marginRight: 4}}
-                      />
-                      <AppText
-                        style={{
-                          color: '#9CA3AF',
-                          fontSize: 10,
-                          fontWeight: '500',
-                        }}>
-                        Build
-                      </AppText>
-                    </View>
+                    <MaterialCommunityIcons
+                      name="cpu-64-bit"
+                      size={14}
+                      color="#60A5FA"
+                      style={{marginRight: 5}}
+                    />
                     <AppText
                       style={{
                         color: '#ffffff',
                         fontSize: 12,
-                        fontWeight: '700',
+                        fontWeight: '600',
                       }}>
-                      ARM64-v8a
+                      ARM64
                     </AppText>
                   </View>
 
@@ -602,47 +543,34 @@ const Settings = ({navigation}: Props) => {
                   <View
                     style={{
                       flex: 1,
-                      backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      backgroundColor: '#2d3036',
                       borderRadius: 14,
                       paddingVertical: 9,
-                      paddingHorizontal: 10,
+                      paddingHorizontal: 8,
                       borderWidth: 1,
-                      borderColor: 'rgba(255, 255, 255, 0.05)',
-                      alignItems: 'center',
+                      borderColor: 'rgba(255, 255, 255, 0.04)',
                     }}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        marginBottom: 3,
-                      }}>
-                      <MaterialCommunityIcons
-                        name="puzzle"
-                        size={12}
-                        color="#FBBF24"
-                        style={{marginRight: 4}}
-                      />
-                      <AppText
-                        style={{
-                          color: '#9CA3AF',
-                          fontSize: 10,
-                          fontWeight: '500',
-                        }}>
-                        Provider
-                      </AppText>
-                    </View>
+                    <MaterialCommunityIcons
+                      name="puzzle"
+                      size={13}
+                      color="#FBBF24"
+                      style={{marginRight: 5}}
+                    />
                     <AppText
                       numberOfLines={1}
                       style={{
                         color: '#ffffff',
                         fontSize: 12,
-                        fontWeight: '700',
+                        fontWeight: '600',
                       }}>
                       {providerName}
                     </AppText>
                   </View>
                 </View>
-              </LinearGradient>
+              </View>
             </Pressable>
           </AnimatedSection>
 
