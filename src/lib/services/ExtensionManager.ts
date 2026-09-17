@@ -71,26 +71,25 @@ export class ExtensionManager {
 
   private migrateToValoraFilmProviders(): void {
     try {
-      const sources = extensionStorage.getProviderSources();
-      const hasNewSource = sources.some(
-        s => s.author === 'B7ByteMe' || s.url.includes('valorafilm-providers'),
-      );
-
-      if (!hasNewSource) {
-        extensionStorage.addProviderSources(
-          'B7ByteMe',
-          'https://raw.githubusercontent.com/B7ByteMe/valorafilm-providers/refs/heads/main',
-        );
+      const hasMigrated = mainStorage.getBool('hasMigratedValoraProviders_v1', false);
+      if (hasMigrated) {
+        return;
       }
 
-      // Remove any legacy provider sources
+      const sources = extensionStorage.getProviderSources();
       sources.forEach(s => {
-        if (s.author !== 'B7ByteMe') {
+        if (s.url.includes('airflix-providers')) {
           extensionStorage.removeProviderSource(s.author);
         }
       });
 
+      extensionStorage.addProviderSources(
+        'B7ByteMe',
+        'https://raw.githubusercontent.com/B7ByteMe/valorafilm-providers/refs/heads/main',
+      );
       extensionStorage.setDefaultProviderSource('B7ByteMe');
+
+      mainStorage.setBool('hasMigratedValoraProviders_v1', true);
     } catch (error) {
       console.warn('Failed to migrate to ValoraFilm providers:', error);
     }
