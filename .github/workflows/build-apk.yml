@@ -1,0 +1,126 @@
+name: Build Valora Film APK
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'README.md'
+      - '.gitignore'
+  workflow_dispatch:
+    inputs:
+      release_title:
+        description: 'Release Title'
+        required: false
+        default: 'Valora Film v1.0.0'
+
+permissions:
+  contents: write
+
+jobs:
+  build-apk:
+    name: Build Android APK (arm64-v8a & universal)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Install Node dependencies
+        run: |
+          npm ci || npm install --legacy-peer-deps
+
+      - name: Build Sandbox Runtime
+        run: |
+          npm run build:sandbox
+
+      - name: Expo Prebuild (Generate Android Project)
+        run: |
+          npx expo prebuild --platform android --clean --no-install
+
+      - name: Create Release Keystore
+        run: |
+          mkdir -p android/app
+          keytool -genkey -v \
+            -keystore android/app/release.keystore \
+            -alias valorafilm \
+            -keyalg RSA \
+            -keysize 2048 \
+            -validity 10000 \
+            -storepass valorafilm123 \
+            -keypass valorafilm123 \
+            -dname "CN=ValoraFilm, OU=Valora, O=Valora, L=Jakarta, S=Jakarta, C=ID"
+
+      - name: Build Android Release APKs
+        env:
+          MYAPP_UPLOAD_STORE_FILE: ${{ github.workspace }}/android/app/release.keystore
+          MYAPP_UPLOAD_STORE_PASSWORD: valorafilm123
+          MYAPP_UPLOAD_KEY_ALIAS: valorafilm
+          MYAPP_UPLOAD_KEY_PASSWORD: valorafilm123
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleRelease \
+            -Pandroid.injected.signing.store.file=${{ github.workspace }}/android/app/release.keystore \
+            -Pandroid.injected.signing.store.password="valorafilm123" \
+            -Pandroid.injected.signing.key.alias="valorafilm" \
+            -Pandroid.injected.signing.key.password="valorafilm123" \
+            --no-daemon --stacktrace
+
+      - name: Collect and Rename APKs
+        id: collect_apks
+        run: |
+          mkdir -p $GITHUB_WORKSPACE/dist-apks
+          find android/app/build/outputs/apk/release -name "*.apk" -exec cp {} $GITHUB_WORKSPACE/dist-apks/ \;
+          echo "=== Collected APKs ==="
+          ls -lh $GITHUB_WORKSPACE/dist-apks
+
+          ARM64_APK=$(find $GITHUB_WORKSPACE/dist-apks -name "*arm64-v8a*.apk" | head -n 1)
+          echo "ARM64_APK=$ARM64_APK" >> $GITHUB_ENV
+          echo "Found 64-bit APK: $ARM64_APK"
+
+      - name: Upload 64-bit APK (arm64-v8a) Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ValoraFilm-arm64-v8a-apk
+          path: ${{ github.workspace }}/dist-apks/*arm64-v8a*.apk
+          if-no-files-found: error
+
+      - name: Upload All APKs (Universal & Architectures) Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ValoraFilm-All-APKs
+          path: ${{ github.workspace }}/dist-apks/*.apk
+          if-no-files-found: error
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.0-build${{ github.run_number }}
+          name: ${{ github.event.inputs.release_title || 'Valora Film v1.0.0' }}
+          draft: false
+          prerelease: false
+          files: |
+            ${{ github.workspace }}/dist-apks/*.apk
+          body: |
+            ## Valora Film v1.0.0 Release
+            Automated build for Valora Film Android.
+
+            ### APK Downloads:
+            - **64-bit ARM (arm64-v8a)**: Recommended for most modern Android phones (64-bit).
+            - **Universal**: Compatible with all architectures.
+            - **32-bit ARM (armeabi-v7a)**: For older 32-bit devices.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
