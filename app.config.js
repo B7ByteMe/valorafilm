@@ -79,7 +79,7 @@ module.exports = () => {
           ],
           enableProguardInReleaseBuilds: true,
           splits: {
-            abi: {enable: true, universalApk: true},
+            abi: {enable: true, universalApk: false},
           },
           buildVariants: {
             release: {
@@ -89,7 +89,7 @@ module.exports = () => {
                 abi: {
                   enable: true,
                   reset: false,
-                  include: ['armeabi-v7a', 'arm64-v8a'],
+                  include: ['arm64-v8a'],
                 },
               },
             },
@@ -121,7 +121,7 @@ module.exports = () => {
       autolinking: {exclude: ['expo-splash-screen']},
       plugins,
       slug: 'valora-film',
-      version: '1.0.0',
+      version: '1.0.1',
       userInterfaceStyle: 'dark',
       experiments: {
         reactCompiler: true,
@@ -132,7 +132,7 @@ module.exports = () => {
           : {}),
         minSdkVersion: 28,
         package: PACKAGE_NAME,
-        versionCode: 190,
+        versionCode: 191,
         permissions: [
           'FOREGROUND_SERVICE',
           'FOREGROUND_SERVICE_DATA_SYNC',

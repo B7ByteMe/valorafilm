@@ -12,7 +12,7 @@ on:
       release_title:
         description: 'Release Title'
         required: false
-        default: 'Valora Film v1.0.0'
+        default: 'Valora Film v1.0.1'
 
 permissions:
   contents: write
@@ -108,14 +108,14 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.0.0-build${{ github.run_number }}
-          name: ${{ github.event.inputs.release_title || 'Valora Film v1.0.0' }}
+          tag_name: v1.0.1-build${{ github.run_number }}
+          name: ${{ github.event.inputs.release_title || 'Valora Film v1.0.1' }}
           draft: false
           prerelease: false
           files: |
             ${{ github.workspace }}/dist-apks/*.apk
           body: |
-            ## Valora Film v1.0.0 Release
+            ## Valora Film v1.0.1 Release
             Automated build for Valora Film Android.
 
             ### APK Downloads:

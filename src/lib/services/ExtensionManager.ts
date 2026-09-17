@@ -442,65 +442,91 @@ export class ExtensionManager {
       this.migrateLegacyCustomProviderSource();
       this.migrateToValoraFilmProviders();
 
-      const isFirstLaunch = mainStorage.getBool('isFirstLaunch', true);
-      if (isFirstLaunch && extensionStorage.getProviderSources().length === 0) {
-        // Pre-add B7ByteMe source
+      // Ensure B7ByteMe source exists
+      if (extensionStorage.getProviderSources().length === 0) {
         extensionStorage.addProviderSources(
           'B7ByteMe',
           'https://raw.githubusercontent.com/B7ByteMe/valorafilm-providers/refs/heads/main',
         );
         extensionStorage.setDefaultProviderSource('B7ByteMe');
+      }
 
-        // Pre-install valorafilm provider from memory bundle
+      const installed = extensionStorage.getInstalledProviders();
+      const isValoraInstalled = installed.some(p => p.value === 'valorafilm');
+
+      // If valorafilm is not installed yet (e.g. first launch), auto-download and install only valorafilm
+      if (!isValoraInstalled) {
+        const source = this.getActiveSource() || {
+          author: 'B7ByteMe',
+          url: 'https://raw.githubusercontent.com/B7ByteMe/valorafilm-providers/refs/heads/main',
+        };
+
+        const valoraProvider: ProviderExtension = {
+          value: 'valorafilm',
+          display_name: 'ValoraFilm',
+          source: {
+            author: source.author,
+            url: source.url,
+          },
+          version: '2.27',
+          icon: '',
+          disabled: false,
+          type: 'global',
+          installed: true,
+        };
+
         try {
-          const { builtinAirflix } = require('./builtinAirflix');
-          const valoraProvider: ProviderExtension = {
-            value: 'valorafilm',
-            display_name: 'Valora Film',
-            source: {
-              author: 'B7ByteMe',
-              url: 'https://raw.githubusercontent.com/B7ByteMe/valorafilm-providers/refs/heads/main',
-            },
-            version: '2.27',
-            icon: '',
-            disabled: false,
-            type: 'global',
-            installed: true,
-          };
-
-          extensionStorage.installProvider(valoraProvider);
-
-          const modulesObj: Record<string, string> = {};
-          for (const [fileName, fileCode] of Object.entries(builtinAirflix)) {
-            if (fileName !== 'manifest') {
-              modulesObj[fileName] = fileCode as string;
-            }
+          // Attempt to fetch manifest to get latest version if available
+          const manifest = await this.fetchManifest(source, false).catch(() => []);
+          const valoraFromManifest = manifest.find(p => p.value === 'valorafilm');
+          if (valoraFromManifest?.version) {
+            valoraProvider.version = valoraFromManifest.version;
           }
 
-          extensionStorage.cacheProviderModules({
-            value: 'valorafilm',
-            sourceAuthor: 'B7ByteMe',
-            version: '2.27',
-            cachedAt: Date.now(),
-            modules: modulesObj,
-          });
-          mainStorage.setBool('isFirstLaunch', false);
-        } catch (err) {
+          console.log('Auto-downloading Valora Film provider on startup...');
+          await this.installProvider(valoraProvider);
+          console.log('Successfully auto-downloaded Valora Film provider');
+        } catch (downloadError) {
           console.warn(
-            'Failed to pre-install valorafilm provider from memory:',
-            err,
+            'Failed to download Valora Film provider from network, falling back to bundled version:',
+            downloadError,
           );
+          // Fallback to builtin memory bundle so the app works even offline or if network is slow
+          try {
+            const { builtinAirflix } = require('./builtinAirflix');
+            extensionStorage.installProvider(valoraProvider);
+
+            const modulesObj: Record<string, string> = {};
+            for (const [fileName, fileCode] of Object.entries(builtinAirflix)) {
+              if (fileName !== 'manifest') {
+                modulesObj[fileName] = fileCode as string;
+              }
+            }
+
+            extensionStorage.cacheProviderModules({
+              value: 'valorafilm',
+              sourceAuthor: source.author,
+              version: valoraProvider.version,
+              cachedAt: Date.now(),
+              modules: modulesObj,
+            });
+          } catch (builtinErr) {
+            console.error(
+              'Failed to pre-install bundled Valora Film provider:',
+              builtinErr,
+            );
+          }
         }
       }
 
       // Load providers from cache
       const source = this.getActiveSource();
-      const installed = extensionStorage.getInstalledProviders();
+      const currentInstalled = extensionStorage.getInstalledProviders();
       const available = source
         ? extensionStorage.getAvailableProviders(source.author)
         : [];
 
-      console.log(`Loaded ${installed.length} installed providers`);
+      console.log(`Loaded ${currentInstalled.length} installed providers`);
       console.log(`Loaded ${available.length} available providers`);
 
       if (!source) {

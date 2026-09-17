@@ -27,7 +27,8 @@ import {
   NativeStackNavigationProp,
 } from '@react-navigation/native-stack';
 import {SettingsStackParamList, TabStackParamList} from '../../App';
-import {MaterialIcons, Ionicons} from '@expo/vector-icons';
+import {MaterialIcons, Ionicons, MaterialCommunityIcons} from '@expo/vector-icons';
+import LinearGradient from 'react-native-linear-gradient';
 import Animated, {
   FadeInDown,
   FadeInUp,
@@ -41,7 +42,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import {useNavigation} from '@react-navigation/native';
 import useNavigationPreferencesStore from '../../lib/zustand/navigationPreferencesStore';
-import GitHubStarButton from './components/GitHubStarButton';
+import useContentStore from '../../lib/zustand/contentStore';
 import DnsPreference from './components/DnsPreference';
 import IconButton from '../../components/ui/IconButton';
 import SettingsRow from '../../components/ui/SettingsRow';
@@ -204,6 +205,8 @@ const Settings = ({navigation}: Props) => {
   const hideDownloadsTab = useNavigationPreferencesStore(
     state => state.hideDownloadsTab,
   );
+  const activeProvider = useContentStore(state => state.provider);
+  const providerName = activeProvider?.display_name || activeProvider?.value || 'ValoraFilm';
 
   const scrollY = useSharedValue(0);
   const [updateLoading, setUpdateLoading] = React.useState(false);
@@ -340,50 +343,307 @@ const Settings = ({navigation}: Props) => {
         </View>
 
         <View className="px-5">
-          {/* Profile Header Card */}
+          {/* Valora Film Hero Header Card */}
           <AnimatedSection delay={50}>
-            <View
-              style={{
-                backgroundColor: '#232427', // Silver card
-                borderRadius: 24,
-                padding: 20,
-                flexDirection: 'row',
-                alignItems: 'center',
+            <Pressable
+              onPress={() => {
+                if (settingsStorage.isHapticFeedbackEnabled()) {
+                  ReactNativeHapticFeedback.trigger('impactLight', {
+                    enableVibrateFallback: true,
+                    ignoreAndroidSystemSettings: false,
+                  });
+                }
+                navigation.navigate('About');
+              }}
+              style={({pressed}) => ({
+                opacity: pressed ? 0.92 : 1,
+                transform: [{scale: pressed ? 0.99 : 1}],
                 marginBottom: 20,
-              }}>
-              <View
+              })}>
+              <LinearGradient
+                colors={['#252830', '#1c1e24', '#15161b']}
+                start={{x: 0, y: 0}}
+                end={{x: 1, y: 1}}
                 style={{
-                  width: 64,
-                  height: 64,
-                  borderRadius: 20,
-                  backgroundColor: '#383a40',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginRight: 16,
+                  borderRadius: 24,
+                  padding: 18,
+                  borderWidth: 1,
+                  borderColor: 'rgba(255, 255, 255, 0.08)',
+                  overflow: 'hidden',
+                  position: 'relative',
                 }}>
-                <Image source={require('../../../assets/icon.png')} style={{ width: 44, height: 44 }} resizeMode="contain" />
-              </View>
-              <View className="justify-center">
-                <AppText role="titleLarge" style={{ color: '#ffffff', fontSize: 22 }}>
-                  Valora Film
-                </AppText>
+                {/* Subtle decorative glow orb */}
                 <View
                   style={{
-                    backgroundColor: '#383a40',
-                    borderRadius: 12,
-                    paddingHorizontal: 8,
-                    paddingVertical: 4,
-                    alignSelf: 'flex-start',
-                    marginTop: 6,
+                    position: 'absolute',
+                    top: -40,
+                    right: -40,
+                    width: 120,
+                    height: 120,
+                    borderRadius: 60,
+                    backgroundColor: colors.primary,
+                    opacity: 0.08,
+                  }}
+                />
+
+                {/* Main branding row */}
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
                   }}>
-                  <AppText
-                    role="labelSmall"
-                    style={{color: '#a5c0ff', }}>
-                    v{Constants.expoConfig?.version || '1.0.0'}
-                  </AppText>
+                  <View style={{flexDirection: 'row', alignItems: 'center', flex: 1}}>
+                    {/* App Icon Container */}
+                    <View
+                      style={{
+                        position: 'relative',
+                        marginRight: 16,
+                      }}>
+                      <LinearGradient
+                        colors={['#323642', '#22252e']}
+                        style={{
+                          width: 62,
+                          height: 62,
+                          borderRadius: 20,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          borderWidth: 1,
+                          borderColor: 'rgba(255, 255, 255, 0.12)',
+                        }}>
+                        <Image
+                          source={require('../../../assets/icon.png')}
+                          style={{width: 44, height: 44}}
+                          resizeMode="contain"
+                        />
+                      </LinearGradient>
+                      {/* Active Status Dot */}
+                      <View
+                        style={{
+                          position: 'absolute',
+                          bottom: -2,
+                          right: -2,
+                          width: 14,
+                          height: 14,
+                          borderRadius: 7,
+                          backgroundColor: '#10B981',
+                          borderWidth: 2,
+                          borderColor: '#1c1e24',
+                        }}
+                      />
+                    </View>
+
+                    {/* Title and Tagline */}
+                    <View style={{flex: 1, justifyContent: 'center'}}>
+                      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <AppText
+                          role="titleLarge"
+                          style={{
+                            color: '#ffffff',
+                            fontSize: 21,
+                            fontWeight: '700',
+                            letterSpacing: 0.3,
+                          }}>
+                          Valora Film
+                        </AppText>
+                        <View
+                          style={{
+                            marginLeft: 8,
+                            backgroundColor: 'rgba(16, 185, 129, 0.15)',
+                            paddingHorizontal: 7,
+                            paddingVertical: 2,
+                            borderRadius: 6,
+                            borderWidth: 1,
+                            borderColor: 'rgba(16, 185, 129, 0.3)',
+                          }}>
+                          <AppText
+                            style={{
+                              color: '#34D399',
+                              fontSize: 10,
+                              fontWeight: '600',
+                              textTransform: 'uppercase',
+                            }}>
+                            Active
+                          </AppText>
+                        </View>
+                      </View>
+                      <AppText
+                        style={{
+                          color: '#9CA3AF',
+                          fontSize: 12,
+                          marginTop: 3,
+                        }}>
+                        Your Cinematic Streaming Experience
+                      </AppText>
+                    </View>
+                  </View>
+
+                  {/* Navigation indicator */}
+                  <View
+                    style={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: 16,
+                      backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginLeft: 10,
+                    }}>
+                    <Ionicons
+                      name="chevron-forward"
+                      size={18}
+                      color="rgba(255, 255, 255, 0.6)"
+                    />
+                  </View>
                 </View>
-              </View>
-            </View>
+
+                {/* Subtle Divider */}
+                <View
+                  style={{
+                    height: 1,
+                    backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                    marginVertical: 14,
+                  }}
+                />
+
+                {/* Info Chips Grid */}
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    gap: 8,
+                  }}>
+                  {/* Version Pill */}
+                  <View
+                    style={{
+                      flex: 1,
+                      backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                      borderRadius: 14,
+                      paddingVertical: 9,
+                      paddingHorizontal: 10,
+                      borderWidth: 1,
+                      borderColor: 'rgba(255, 255, 255, 0.05)',
+                      alignItems: 'center',
+                    }}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        marginBottom: 3,
+                      }}>
+                      <MaterialIcons
+                        name="verified"
+                        size={12}
+                        color={colors.primary}
+                        style={{marginRight: 4}}
+                      />
+                      <AppText
+                        style={{
+                          color: '#9CA3AF',
+                          fontSize: 10,
+                          fontWeight: '500',
+                        }}>
+                        Version
+                      </AppText>
+                    </View>
+                    <AppText
+                      style={{
+                        color: '#ffffff',
+                        fontSize: 12,
+                        fontWeight: '700',
+                      }}>
+                      v{Constants.expoConfig?.version || '1.0.1'}
+                    </AppText>
+                  </View>
+
+                  {/* Arch / Target Pill */}
+                  <View
+                    style={{
+                      flex: 1,
+                      backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                      borderRadius: 14,
+                      paddingVertical: 9,
+                      paddingHorizontal: 10,
+                      borderWidth: 1,
+                      borderColor: 'rgba(255, 255, 255, 0.05)',
+                      alignItems: 'center',
+                    }}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        marginBottom: 3,
+                      }}>
+                      <MaterialCommunityIcons
+                        name="cpu-64-bit"
+                        size={12}
+                        color="#60A5FA"
+                        style={{marginRight: 4}}
+                      />
+                      <AppText
+                        style={{
+                          color: '#9CA3AF',
+                          fontSize: 10,
+                          fontWeight: '500',
+                        }}>
+                        Build
+                      </AppText>
+                    </View>
+                    <AppText
+                      style={{
+                        color: '#ffffff',
+                        fontSize: 12,
+                        fontWeight: '700',
+                      }}>
+                      ARM64-v8a
+                    </AppText>
+                  </View>
+
+                  {/* Provider Pill */}
+                  <View
+                    style={{
+                      flex: 1,
+                      backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                      borderRadius: 14,
+                      paddingVertical: 9,
+                      paddingHorizontal: 10,
+                      borderWidth: 1,
+                      borderColor: 'rgba(255, 255, 255, 0.05)',
+                      alignItems: 'center',
+                    }}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        marginBottom: 3,
+                      }}>
+                      <MaterialCommunityIcons
+                        name="puzzle"
+                        size={12}
+                        color="#FBBF24"
+                        style={{marginRight: 4}}
+                      />
+                      <AppText
+                        style={{
+                          color: '#9CA3AF',
+                          fontSize: 10,
+                          fontWeight: '500',
+                        }}>
+                        Provider
+                      </AppText>
+                    </View>
+                    <AppText
+                      numberOfLines={1}
+                      style={{
+                        color: '#ffffff',
+                        fontSize: 12,
+                        fontWeight: '700',
+                      }}>
+                      {providerName}
+                    </AppText>
+                  </View>
+                </View>
+              </LinearGradient>
+            </Pressable>
           </AnimatedSection>
 
           {/* 2x2 Grid */}
@@ -488,15 +748,15 @@ const Settings = ({navigation}: Props) => {
             </SettingsSection>
           </AnimatedSection>
 
-          {/* About & GitHub section */}
+          {/* About section */}
           <AnimatedSection delay={400}>
             <SettingsSection title="About">
               <SettingsRow
                 title="About Valora Film"
                 icon="information-outline"
+                divider={false}
                 onPress={() => navigation.navigate('About')}
               />
-              <GitHubStarButton primary={colors.primary} />
             </SettingsSection>
           </AnimatedSection>
           

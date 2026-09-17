@@ -42,8 +42,8 @@ if (project.android) {
       abi {
         enable true
         reset()
-        include 'armeabi-v7a', 'arm64-v8a'
-        universalApk true
+        include 'arm64-v8a'
+        universalApk false
       }
     }
   }
