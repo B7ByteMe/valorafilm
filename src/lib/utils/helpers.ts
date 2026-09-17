@@ -5,7 +5,7 @@ export const formatName = (name: string): string => {
   return name.replaceAll(/[^a-zA-Z0-9]/g, '_');
 };
 
-const DEFAULT_REPO_NAME = 'airflix-providers';
+const DEFAULT_REPO_NAME = 'valorafilm-providers';
 const DEFAULT_BRANCH = 'main';
 const RAW_GITHUB_HOST = 'raw.githubusercontent.com';
 const GITHUB_HOST = 'github.com';

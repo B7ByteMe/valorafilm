@@ -69,6 +69,37 @@ export class ExtensionManager {
     }
   }
 
+  private migrateToValoraFilmProviders(): void {
+    try {
+      const sources = extensionStorage.getProviderSources();
+      const hasOldSource = sources.some(
+        s => s.author === 'd0x-dev' || s.url.includes('airflix-providers'),
+      );
+      const hasNewSource = sources.some(
+        s => s.author === 'B7ByteMe' || s.url.includes('valorafilm-providers'),
+      );
+
+      if (!hasNewSource) {
+        extensionStorage.addProviderSources(
+          'B7ByteMe',
+          'https://raw.githubusercontent.com/B7ByteMe/valorafilm-providers/refs/heads/main',
+        );
+      }
+
+      if (hasOldSource) {
+        extensionStorage.removeProviderSource('d0x-dev');
+        extensionStorage.setDefaultProviderSource('B7ByteMe');
+      }
+
+      const currentDefault = extensionStorage.getProviderSource();
+      if (!currentDefault || currentDefault.author === 'd0x-dev') {
+        extensionStorage.setDefaultProviderSource('B7ByteMe');
+      }
+    } catch (error) {
+      console.warn('Failed to migrate to ValoraFilm providers:', error);
+    }
+  }
+
   // Test mode configuration
   private testModuleCacheExpiry = 200000;
   private testModuleCache = new Map<
@@ -414,49 +445,56 @@ export class ExtensionManager {
   async initialize(): Promise<void> {
     try {
       this.migrateLegacyCustomProviderSource();
+      this.migrateToValoraFilmProviders();
 
       const isFirstLaunch = mainStorage.getBool('isFirstLaunch', true);
       if (isFirstLaunch && extensionStorage.getProviderSources().length === 0) {
-                // Pre-add d0x-dev source
-        extensionStorage.addProviderSources('d0x-dev', 'https://raw.githubusercontent.com/d0x-dev/airflix-providers/refs/heads/main');
-        extensionStorage.setDefaultProviderSource('d0x-dev');
+        // Pre-add B7ByteMe source
+        extensionStorage.addProviderSources(
+          'B7ByteMe',
+          'https://raw.githubusercontent.com/B7ByteMe/valorafilm-providers/refs/heads/main',
+        );
+        extensionStorage.setDefaultProviderSource('B7ByteMe');
 
-        // Pre-install airflix provider from memory bundle
+        // Pre-install valorafilm provider from memory bundle
         try {
           const { builtinAirflix } = require('./builtinAirflix');
-          const airflixProvider: ProviderExtension = {
-            value: 'airflix',
+          const valoraProvider: ProviderExtension = {
+            value: 'valorafilm',
             display_name: 'Valora Film',
             source: {
-              author: 'd0x-dev',
-              url: 'https://raw.githubusercontent.com/d0x-dev/airflix-providers/refs/heads/main'
+              author: 'B7ByteMe',
+              url: 'https://raw.githubusercontent.com/B7ByteMe/valorafilm-providers/refs/heads/main',
             },
             version: '2.27',
             icon: '',
             disabled: false,
             type: 'global',
-            installed: true
+            installed: true,
           };
-          
-                      extensionStorage.installProvider(airflixProvider);
-            
-            const modulesObj: Record<string, string> = {};
-            for (const [fileName, fileCode] of Object.entries(builtinAirflix)) {
-              if (fileName !== 'manifest') {
-                 modulesObj[fileName] = fileCode as string;
-              }
+
+          extensionStorage.installProvider(valoraProvider);
+
+          const modulesObj: Record<string, string> = {};
+          for (const [fileName, fileCode] of Object.entries(builtinAirflix)) {
+            if (fileName !== 'manifest') {
+              modulesObj[fileName] = fileCode as string;
             }
-            
-            extensionStorage.cacheProviderModules({
-              value: 'airflix',
-              sourceAuthor: 'd0x-dev',
-              version: '2.27',
-              cachedAt: Date.now(),
-              modules: modulesObj
-            });
-            mainStorage.setBool('isFirstLaunch', false);
+          }
+
+          extensionStorage.cacheProviderModules({
+            value: 'valorafilm',
+            sourceAuthor: 'B7ByteMe',
+            version: '2.27',
+            cachedAt: Date.now(),
+            modules: modulesObj,
+          });
+          mainStorage.setBool('isFirstLaunch', false);
         } catch (err) {
-          console.warn('Failed to pre-install airflix provider from memory:', err);
+          console.warn(
+            'Failed to pre-install valorafilm provider from memory:',
+            err,
+          );
         }
       }
 
