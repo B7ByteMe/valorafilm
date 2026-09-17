@@ -390,8 +390,8 @@ const Settings = ({navigation}: Props) => {
                         borderColor: 'rgba(255, 255, 255, 0.08)',
                       }}>
                       <Image
-                        source={require('../../../assets/icon.png')}
-                        style={{width: 40, height: 40}}
+                        source={require('../../../assets/icon_transparent.png')}
+                        style={{width: 38, height: 38}}
                         resizeMode="contain"
                       />
                     </View>

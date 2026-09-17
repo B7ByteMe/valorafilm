@@ -163,7 +163,7 @@ const About = () => {
                 },
               ]}>
               <Image
-                source={require('../../../assets/icon.png')}
+                source={require('../../../assets/icon_transparent.png')}
                 style={styles.logoImage}
                 resizeMode="contain"
               />
