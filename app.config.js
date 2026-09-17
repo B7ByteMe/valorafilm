@@ -110,6 +110,7 @@ module.exports = () => {
     'expo-status-bar',
   ];
   return {
+    
     expo: {
       name: 'Valora Film',
       icon: './assets/icon.png',
