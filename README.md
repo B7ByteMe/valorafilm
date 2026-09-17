@@ -1,12 +1,12 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/d0x-dev/AirFlix/refs/heads/main/uploads/nonbg.png" width="250" alt="Valora Film Logo" />
+  <img src="https://raw.githubusercontent.com/B7ByteMe/valorafilm/refs/heads/main/uploads/nonbg.png" width="250" alt="Valora Film Logo" />
 </p>
 
 <h1 align="center">Valora Film</h1>
 
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/d0x-dev/AirFlix/refs/heads/main/uploads/preview1.png" alt="AirFlix Preview 1" width="100%"/>
+<img src="https://raw.githubusercontent.com/B7ByteMe/valorafilm/refs/heads/main/uploads/preview1.png" alt="AirFlix Preview 1" width="100%"/>
 <br>
 
 
@@ -36,7 +36,7 @@
 
 ---
 
-<img src="https://raw.githubusercontent.com/d0x-dev/AirFlix/refs/heads/main/uploads/preview2.png" alt="AirFlix Preview 2" width="100%"/>
+<img src="https://raw.githubusercontent.com/B7ByteMe/valorafilm/refs/heads/main/uploads/preview2.png" alt="AirFlix Preview 2" width="100%"/>
 
 ## 🌐 Get Started
 
@@ -121,11 +121,11 @@ We'd love your contributions! Here's how to help:
 
 ⭐ If you love Valora Film, please consider giving us a star on GitHub! ⭐
 
-<a href="https://www.star-history.com/?repos=d0x-dev%2FAirFlix&type=date&legend=top-left">
+<a href="https://www.star-history.com/?repos=B7ByteMe%2Fvalorafilm&type=date&legend=top-left">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=d0x-dev/AirFlix&type=date&theme=dark&legend=top-left" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=d0x-dev/AirFlix&type=date&legend=top-left" />
-    <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=d0x-dev/AirFlix&type=date&legend=top-left" width="500"/>
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=B7ByteMe/valorafilm&type=date&theme=dark&legend=top-left" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=B7ByteMe/valorafilm&type=date&legend=top-left" />
+    <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=B7ByteMe/valorafilm&type=date&legend=top-left" width="500"/>
   </picture>
 </a>
 
