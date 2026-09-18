@@ -95,6 +95,7 @@ const Hero = memo(({isDrawerOpen, onOpenDrawer}: HeroProps) => {
         heroData?.poster ||
         hero?.image ||
         '',
+      cache: 'force-cache' as const,
     }),
     [hero?.image, heroData],
   );

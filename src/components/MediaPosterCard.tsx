@@ -42,7 +42,8 @@ const MediaPosterCard = ({
           }}>
           {poster ? (
             <Image
-              source={{uri: poster}}
+              source={{uri: poster, cache: 'force-cache'}}
+              progressiveRenderingEnabled={true}
               resizeMode="cover"
               style={{aspectRatio: 2 / 3, width}}
             />

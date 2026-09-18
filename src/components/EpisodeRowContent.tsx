@@ -89,7 +89,8 @@ const EpisodeRowContent = ({
     <>
       {imageUri && !imageFailed ? (
         <Image
-          source={{uri: imageUri}}
+          source={{uri: imageUri, cache: 'force-cache'}}
+          progressiveRenderingEnabled={true}
           resizeMode="cover"
           onError={() => setImageFailed(true)}
           style={{borderRadius: 4, height: 56, width: 88}}

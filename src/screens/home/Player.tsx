@@ -1285,10 +1285,10 @@ const Player = ({route}: Props): React.JSX.Element => {
           // High-bitrate 4K streams can otherwise fill Android's complete
           // Java heap: react-native-video defaults the allocator limit to
           // 100%, then the codec has no room left for output buffers.
-          minBufferMs: 8000,
+          minBufferMs: 5000,
           maxBufferMs: 20000,
-          bufferForPlaybackMs: 1500,
-          bufferForPlaybackAfterRebufferMs: 3000,
+          bufferForPlaybackMs: 800,
+          bufferForPlaybackAfterRebufferMs: 1500,
           backBufferDurationMs: 0,
           maxHeapAllocationPercent: 0.18,
           minBufferMemoryReservePercent: 0.2,

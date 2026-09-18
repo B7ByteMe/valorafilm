@@ -31,7 +31,7 @@ export const queryClient = new QueryClient({
       // Network configuration
       refetchOnWindowFocus: false, // Don't refetch when app regains focus
       refetchOnReconnect: 'always', // Always refetch when reconnected
-      refetchOnMount: true, // Refetch when component mounts
+      refetchOnMount: false, // Use cached data immediately if within staleTime
 
       // Performance optimizations
       refetchInterval: false, // Disable automatic polling by default
