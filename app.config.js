@@ -121,7 +121,7 @@ module.exports = () => {
       autolinking: {exclude: ['expo-splash-screen']},
       plugins,
       slug: 'valora-film',
-      version: '1.0.1',
+      version: '1.0.2',
       userInterfaceStyle: 'dark',
       experiments: {
         reactCompiler: true,
@@ -132,7 +132,7 @@ module.exports = () => {
           : {}),
         minSdkVersion: 28,
         package: PACKAGE_NAME,
-        versionCode: 191,
+        versionCode: 192,
         permissions: [
           'FOREGROUND_SERVICE',
           'FOREGROUND_SERVICE_DATA_SYNC',

@@ -94,7 +94,7 @@ const About = () => {
   const appVersion =
     Application.nativeApplicationVersion ||
     Constants.expoConfig?.version ||
-    '1.0.1';
+    '1.0.2';
   const packageName =
     Application.applicationId ||
     Constants.expoConfig?.android?.package ||

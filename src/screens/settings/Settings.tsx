@@ -501,7 +501,7 @@ const Settings = ({navigation}: Props) => {
                         fontSize: 12,
                         fontWeight: '600',
                       }}>
-                      v{Constants.expoConfig?.version || '1.0.1'}
+                      v{Constants.expoConfig?.version || '1.0.2'}
                     </AppText>
                   </View>
 
