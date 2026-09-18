@@ -379,19 +379,15 @@ const Settings = ({navigation}: Props) => {
                     {/* App Icon */}
                     <View
                       style={{
-                        width: 58,
-                        height: 58,
-                        borderRadius: 18,
-                        backgroundColor: '#1a1b1e',
+                        width: 52,
+                        height: 52,
                         alignItems: 'center',
                         justifyContent: 'center',
                         marginRight: 14,
-                        borderWidth: 1,
-                        borderColor: 'rgba(255, 255, 255, 0.08)',
                       }}>
                       <Image
                         source={require('../../../assets/icon_transparent.png')}
-                        style={{width: 38, height: 38}}
+                        style={{width: 50, height: 50}}
                         resizeMode="contain"
                       />
                     </View>
@@ -602,35 +598,6 @@ const Settings = ({navigation}: Props) => {
             </View>
           </AnimatedSection>
 
-          {/* User Interface Section (duplicate items) */}
-          <AnimatedSection delay={150}>
-            <SettingsSection title="User Interface">
-              <SettingsRow
-                title="Appearance"
-                description="Dark theme"
-                icon="palette-outline"
-                onPress={() => navigation.navigate('Appearance')}
-              />
-              <SettingsRow
-                title="Provider Manager"
-                description="Manage extensions"
-                icon="puzzle-outline"
-                onPress={() => navigation.navigate('Extensions')}
-              />
-              <SettingsRow
-                title="Subtitle Style"
-                description="Customize captions"
-                icon="subtitles-outline"
-                onPress={() => navigation.navigate('SubTitlesPreferences')}
-              />
-              <SettingsRow
-                title="Preferences"
-                icon="tune-variant"
-                divider={false}
-                onPress={() => navigation.navigate('Preferences')}
-              />
-            </SettingsSection>
-          </AnimatedSection>
 
           {/* Network Section */}
           <AnimatedSection delay={200}>

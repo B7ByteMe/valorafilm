@@ -155,13 +155,7 @@ const About = () => {
           <View style={styles.heroSection}>
             <Pressable
               onPress={handleLogoTap}
-              style={[
-                styles.logoWrapper,
-                {
-                  backgroundColor: colors.surfaceContainer,
-                  borderColor: `${colors.primary}35`,
-                },
-              ]}>
+              style={styles.logoWrapper}>
               <Image
                 source={require('../../../assets/icon_transparent.png')}
                 style={styles.logoImage}
@@ -296,22 +290,15 @@ const styles = StyleSheet.create({
     marginBottom: 28,
   },
   logoWrapper: {
-    width: 104,
-    height: 104,
-    borderRadius: 26,
-    borderWidth: 1,
+    width: 90,
+    height: 90,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 4},
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 4,
   },
   logoImage: {
-    width: 72,
-    height: 72,
+    width: 84,
+    height: 84,
   },
   appName: {
     fontSize: 26,
