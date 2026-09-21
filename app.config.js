@@ -121,7 +121,7 @@ module.exports = () => {
       autolinking: {exclude: ['expo-splash-screen']},
       plugins,
       slug: 'valora-film',
-      version: '1.0.2',
+      version: '1.0.3',
       userInterfaceStyle: 'dark',
       experiments: {
         reactCompiler: true,
@@ -132,7 +132,7 @@ module.exports = () => {
           : {}),
         minSdkVersion: 28,
         package: PACKAGE_NAME,
-        versionCode: 192,
+        versionCode: 193,
         permissions: [
           'FOREGROUND_SERVICE',
           'FOREGROUND_SERVICE_DATA_SYNC',
@@ -140,6 +140,8 @@ module.exports = () => {
           'ACCESS_NETWORK_STATE',
           'INTERNET',
           'WRITE_SETTINGS',
+          'POST_NOTIFICATIONS',
+          ...(!IS_PLAYSTORE ? ['REQUEST_INSTALL_PACKAGES'] : []),
         ],
         blockedPermissions: [
           'android.permission.MANAGE_EXTERNAL_STORAGE',

@@ -67,6 +67,7 @@ import {
 } from './lib/sync/syncService';
 import StreamingTabBar from './components/navigation/StreamingTabBar';
 import AppDialogHost from './components/AppDialogHost';
+import InAppUpdateModal from './components/InAppUpdateModal';
 import {
   getAnalytics,
   getCrashlytics,
@@ -587,6 +588,7 @@ const App = () => {
     <SafeAreaProvider>
       <M3ThemeProvider>
         <AppDialogHost />
+        <InAppUpdateModal />
         <GlobalErrorBoundary>
           <QueryClientProvider client={queryClient}>
             <SafeAreaView

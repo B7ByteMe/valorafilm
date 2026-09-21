@@ -1,6 +1,6 @@
 {
   "name": "valora-film",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": true,
   "scripts": {
     "android": "npm run build:sandbox && expo run:android",

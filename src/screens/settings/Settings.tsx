@@ -55,74 +55,7 @@ import {showAppDialog} from '../../lib/zustand/appDialogStore';
 import {clearAppCache} from '../../lib/clearAppCache';
 import SquareSettingsCard from '../../components/ui/SquareSettingsCard';
 import AmbientBackground from '../../components/ui/AmbientBackground';
-
-const deletePartialFile = async (filePath: string) => {
-  try {
-    if (await RNFS.exists(filePath)) {
-      await RNFS.unlink(filePath);
-    }
-  } catch {}
-};
-
-const downloadUpdate = async (url: string, name: string) => {
-  console.log('downloading', url, name);
-  await notificationService.requestPermission();
-
-  const filePath = `${RNFS.CachesDirectoryPath}/${name}`;
-  let expectedSize = 0;
-
-  const {promise} = RNFS.downloadFile({
-    fromUrl: url,
-    background: true,
-    progressInterval: 1000,
-    progressDivider: 1,
-    toFile: filePath,
-    begin: res => {
-      expectedSize = res.contentLength;
-      console.log('begin', res.jobId, res.statusCode, res.contentLength);
-    },
-    progress: res => {
-      notificationService.showUpdateProgress(
-        'Downloading Update',
-        `Version ${Application.nativeApplicationVersion} -> ${name}`,
-        {
-          current: res.bytesWritten,
-          max: res.contentLength,
-          indeterminate: false,
-        },
-      );
-    },
-  });
-
-  try {
-    const res = await promise;
-    await notificationService.cancelNotification('updateProgress');
-
-    if (res.statusCode !== 200 || res.bytesWritten < expectedSize) {
-      console.log(
-        `[update] Download failed: status=${res.statusCode}, bytes=${res.bytesWritten}/${expectedSize}`,
-      );
-      await deletePartialFile(filePath);
-      ToastAndroid.show(
-        'Download failed, please try again',
-        ToastAndroid.SHORT,
-      );
-      return;
-    }
-
-    await notificationService.displayUpdateNotification({
-      id: 'downloadComplete',
-      title: 'Download Complete',
-      body: 'Tap to install',
-      data: {filePath, action: 'install'},
-    });
-  } catch (error) {
-    console.log('[update] Download error:', error);
-    await notificationService.cancelNotification('updateProgress');
-    await deletePartialFile(filePath);
-    ToastAndroid.show('Download failed, please try again', ToastAndroid.SHORT);
-  }
-};
+import {useInAppUpdateStore} from '../../lib/zustand/inAppUpdateStore';
 
 function compareVersions(localVersion: string, remoteVersion: string): boolean {
   try {
@@ -157,42 +90,46 @@ export const checkForUpdate = async (
     if (!data.tag_name) {
       throw new Error(data.message || 'No release found');
     }
-    const remoteVersion = Number(
-      data.tag_name.replace('v', '')?.split('.').join(''),
-    );
-    if (compareVersions(localVersion || '', data.tag_name.replace('v', ''))) {
-      ToastAndroid.show('New update available', ToastAndroid.SHORT);
-      showAppDialog({
-        title: `Update v${localVersion} -> ${data.tag_name}`,
-        message: data.body,
-        messageFormat: 'markdown',
-        actions: [
-          {label: 'Cancel'},
-          {
-            label: 'Update',
-            variant: 'primary',
-            onPress: () => {
-              const apkAsset =
-                data?.assets?.find(
-                  (asset: any) =>
-                    asset.name?.endsWith('.apk') &&
-                    asset.name?.toLowerCase().includes('universal'),
-                ) ||
-                data?.assets?.find((asset: any) =>
-                  asset.name?.endsWith('.apk'),
-                );
-              return autoDownload && apkAsset
-                ? downloadUpdate(apkAsset.browser_download_url, apkAsset.name)
-                : Linking.openURL(data.html_url);
-            },
-          },
-        ],
+    const cleanTag = data.tag_name.replace('v', '');
+    if (compareVersions(localVersion || '', cleanTag)) {
+      const apkAsset =
+        data?.assets?.find(
+          (asset: any) =>
+            asset.name?.endsWith('.apk') &&
+            asset.name?.toLowerCase().includes('arm64'),
+        ) ||
+        data?.assets?.find(
+          (asset: any) =>
+            asset.name?.endsWith('.apk') &&
+            asset.name?.toLowerCase().includes('universal'),
+        ) ||
+        data?.assets?.find((asset: any) =>
+          asset.name?.endsWith('.apk'),
+        );
+
+      if (!apkAsset) {
+        showToast && ToastAndroid.show('File APK pembaruan belum tersedia', ToastAndroid.SHORT);
+        setUpdateLoading(false);
+        return;
+      }
+
+      showToast && ToastAndroid.show('Pembaruan baru tersedia', ToastAndroid.SHORT);
+      useInAppUpdateStore.getState().promptUpdate({
+        currentVersion: localVersion || '1.0.0',
+        newVersion: cleanTag,
+        releaseNotes: data.body || '',
+        apkUrl: apkAsset.browser_download_url,
+        apkName: apkAsset.name,
       });
+
+      if (autoDownload) {
+        useInAppUpdateStore.getState().startDownload();
+      }
     } else {
-      showToast && ToastAndroid.show('App is up to date', ToastAndroid.SHORT);
+      showToast && ToastAndroid.show('Aplikasi sudah versi terbaru', ToastAndroid.SHORT);
     }
   } catch (error) {
-    ToastAndroid.show('Failed to check for update', ToastAndroid.SHORT);
+    showToast && ToastAndroid.show('Gagal memeriksa pembaruan', ToastAndroid.SHORT);
     console.log('Update error', error);
   }
   setUpdateLoading(false);

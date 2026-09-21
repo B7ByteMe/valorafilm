@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 5. Fetch Live GitHub Release stats
   async function fetchReleaseStats() {
     try {
-      const res = await fetch('https://api.github.com/repos/B7ByteMe/valorafilm/releases/tags/v1.0.2');
+      const res = await fetch('https://api.github.com/repos/B7ByteMe/valorafilm/releases/latest');
       if (res.ok) {
         const data = await res.json();
         const asset = data.assets?.find(a => a.name.includes('.apk'));
