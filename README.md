@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="aset/icon.png" width="250" alt="Valora Film Logo" />
+  <img src="assets/icon.png" width="250" alt="Valora Film Logo" />
 </p>
 
 <h1 align="center">Valora Film</h1>
