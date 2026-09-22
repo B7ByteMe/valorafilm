@@ -1,14 +1,10 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/B7ByteMe/valorafilm/refs/heads/main/uploads/nonbg.png" width="250" alt="Valora Film Logo" />
+  <img src="aset/icon.png" width="250" alt="Valora Film Logo" />
 </p>
 
 <h1 align="center">Valora Film</h1>
 
 <div align="center">
-
-<img src="https://raw.githubusercontent.com/B7ByteMe/valorafilm/refs/heads/main/uploads/preview1.png" alt="Valora Film Preview 1" width="100%"/>
-
-<br>
 
 ### Advanced Ad-Free Media Streaming Experience
 
@@ -32,8 +28,6 @@
 * **Modern Settings Interface** - Clean and refined settings interface with transparent cards.
 
 ---
-
-<img src="https://raw.githubusercontent.com/B7ByteMe/valorafilm/refs/heads/main/uploads/preview2.png" alt="Valora Film Preview 2" width="100%"/>
 
 ## Get Started
 
@@ -99,14 +93,6 @@ We welcome contributions to Valora Film.
 ### Made by the Valora Film Team
 
 If you enjoy Valora Film, consider giving the project a star on GitHub.
-
-<a href="https://www.star-history.com/?repos=B7ByteMe%2Fvalorafilm&type=date&legend=top-left">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=B7ByteMe/valorafilm&type=date&theme=dark&legend=top-left" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=B7ByteMe/valorafilm&type=date&legend=top-left" />
-    <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=B7ByteMe/valorafilm&type=date&legend=top-left" width="500"/>
-  </picture>
-</a>
 
 <br><br>
 
